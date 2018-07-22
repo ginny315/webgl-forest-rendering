@@ -1,0 +1,12 @@
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    background-color: #eee;
+    text-align: center;
+}
+p{
+    width: 300px;
+    height: 200px;
+    color:#ee4;
+}
