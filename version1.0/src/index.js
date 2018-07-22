@@ -1,8 +1,9 @@
-import Square from "./js/app2";
+import App from './js/app';
 import './css/reset.css';
 import './css/style.css';
 
-console.log(99999)
+console.log("version="+1.7);
+App();
 
 
 

@@ -26,6 +26,12 @@ module.exports = {
             options: { minimize: true }
           }
         ]
+      },
+      {
+        test:/\.(jpg|png|gif|svg)$/,
+        use:'url-loader',
+        include:path.join(__dirname,'./src'),
+        exclude:/node_modules/
       }
     ]
   },

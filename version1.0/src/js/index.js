@@ -9,7 +9,6 @@ $('body').ready(function(){
             console.log('load combine data-------');
             var posList = data;
             var vertices, faces = [];//length(posList)-2
-            var leafArr = [];
             for(var i=0, len=length(posList)-2; i<len; i++){
                 if(posList[i].length > 25){
                     vertices = posList[0];//vertices.length-1

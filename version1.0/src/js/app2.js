@@ -1,5 +1,6 @@
 const THREE = require('../lib/three');
-const Square = function() {
+const Square = () => {
+    console.log('Square2');
     var renderer = new THREE.WebGLRenderer({
         canvas: document.getElementById('mainCanvas')
     });
@@ -28,6 +29,6 @@ const Square = function() {
     //scene.add(sphere);
     
     renderer.render(scene, camera);
-}
+};
 
 export default Square;
