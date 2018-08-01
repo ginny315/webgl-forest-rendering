@@ -1,4 +1,4 @@
-const THREE = require('../lib/three');
+const THREE = require('../lib/three.min');
 const Helper = {
     showGrids: (scene) => {
         scene.add( new THREE.AxesHelper( 50 ) );

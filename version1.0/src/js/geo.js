@@ -1,5 +1,10 @@
-const THREE = require('../lib/three');
+const THREE = require('../lib/three.min');
 import Translate from '../js/translate';
+// import ThreeExtension from '../js/threeExtension';
+// import imgSrc from '../textures/1.png';
+import img1 from '../textures/1.png';
+import img3 from '../textures/3.png';
+
 
 const Geo = {
     setPlane: (scene) => {
@@ -42,8 +47,16 @@ const Geo = {
      * 根据点的位置贴图
      * 这里是树叶
      */
-    setTexturePoint: (scene,verticlesArr) => {
+    setTexturePoint: (scene,verticlesArr,material) => {
         let geometry = new THREE.Geometry();
+        // let texture = new THREE.TextureLoader().load('../textures/3.png');
+        
+        geometry.vertices = verticlesArr;
+        let points = new THREE.Points(geometry, material);
+        // points.rotation.set(new THREE.Vector3( 0, Math.PI / 6, 0));
+        scene.add(points);
+    },
+    loadTexureMat: () => {
         let texture = new THREE.TextureLoader().load('../textures/3.png');
         let material = new THREE.PointsMaterial({
             size: 1.5,
@@ -53,10 +66,7 @@ const Geo = {
             transparent: true,
             opacity: 1
         });
-        geometry.vertices = verticlesArr;
-        let points = new THREE.Points(geometry, material);
-        // points.rotation.set(new THREE.Vector3( 0, Math.PI / 6, 0));
-        scene.add(points);
+        return material;
     },
     /**
      * two points form a line
@@ -115,6 +125,13 @@ const Geo = {
         vf.castShadow = true;
         scene.add(vf);
    },
+   importImage: () => {
+        let oImg = new Image(); 
+        oImg.onload = function(){
+            document.body.appendChild(oImg);
+        };  
+        oImg.src = imgSrc; 
+   }
 };
 
 export default Geo;

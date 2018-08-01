@@ -1,4 +1,4 @@
-const THREE = require('../lib/three');
+const THREE = require('../lib/three.min');
 const OrbitControls = require('../lib/OrbitControls');
 const SCREEN_WIDTH = window.innerWidth,
       SCREEN_HEIGHT = window.innerHeight;

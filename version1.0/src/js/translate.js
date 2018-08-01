@@ -1,4 +1,4 @@
-const THREE = require('../lib/three');
+const THREE = require('../lib/three.min');
 const Translate = {
     distanceCompute: (verticlesArr) => {
         let v1 = verticlesArr[0],

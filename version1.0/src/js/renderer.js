@@ -1,4 +1,4 @@
-const THREE = require('../lib/three');
+const THREE = require('../lib/three.min');
 const SCREEN_WIDTH = window.innerWidth,
       SCREEN_HEIGHT = window.innerHeight;
 const Renderer = (camera) =>{
@@ -9,10 +9,17 @@ const Renderer = (camera) =>{
     renderer.setClearColor(0xcccccc,1); // black
     renderer.setPixelRatio( window.devicePixelRatio );
     let onWindowResize = (camera) => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize( window.innerWidth, window.innerHeight );
-    }
+        if(camera.inPerspectiveMode){
+            camera.cameraP.aspect = window.innerWidth / window.innerHeight;
+            camera.cameraP.updateProjectionMatrix();
+        }else{
+            camera.cameraO.left = window.innerWidth / - 2;
+            camera.cameraO.right = window.innerWidth / 2;
+            camera.cameraO.top = window.innerHeight / 2;
+            camera.cameraO.bottom = window.innerHeight / - 2;
+            camera.cameraO.updateProjectionMatrix();
+        }
+    };
     window.addEventListener( 'resize', onWindowResize, false );    
     return renderer;
 };

@@ -7,7 +7,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/,'three.js'],
         use: {
           loader: "babel-loader"
         }
@@ -29,9 +29,22 @@ module.exports = {
       },
       {
         test:/\.(jpg|png|gif|svg)$/,
-        use:'url-loader',
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name:'[name].[ext]',
+            public: 'dist/textures',
+            outputPath:'textures'
+          }
+        }],
         include:path.join(__dirname,'./src'),
         exclude:/node_modules/
+      },
+      {
+        test: /\.glsl$/,
+        use: {
+          loader: 'shade-loader'
+        }
       }
     ]
   },
@@ -42,6 +55,9 @@ module.exports = {
     port: 8033,
     host: "127.0.0.1",
   },
+  resolveLoader: {
+    modules: [path.join(__dirname, './src/loaders'), 'node_modules']
+  },  
   plugins: [
     new HtmlWebPackPlugin({
       template: "./src/index.html",

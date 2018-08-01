@@ -1,4 +1,4 @@
-const THREE = require('../lib/three');
+const THREE = require('../lib/three.min');
 const Light = (scene) => {
     let ambient_light, 
         main_light;
