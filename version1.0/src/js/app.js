@@ -76,11 +76,8 @@ const renderTree = () => {
 const App = () => {
   let beginTime = + new Date();
   init();
-  initTerrain();
-  const terrain = new Terrain( noise, 1024, 4, 64 );
-    scene.add( terrain );
-
-    // renderTree();
+//   initTerrain();
+    renderTree();
       let endTime = + new Date();
       let duration = endTime - beginTime;
       console.log('durationTime=',duration);

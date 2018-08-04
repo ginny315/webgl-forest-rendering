@@ -3,14 +3,12 @@ const THREE = require('../lib/three.min');
 const Texture = () => {
     let texturePath = "../textures/";
     let sky = new THREE.TextureLoader().load(texturePath + "sky.png" );
-    console.log('sky')
-    console.log(sky )
   
     let textures = {
       sky: sky,
-      grass: new THREE.TextureLoader().load(texturePath + "grass.jpg"),
+    //   grass: new THREE.TextureLoader().load(texturePath + "grass.jpg"),
       rock: new THREE.TextureLoader().load( texturePath + "rock.jpg" ),
-      snow: new THREE.TextureLoader().load( texturePath + "snow.jpg" )
+    //   snow: new THREE.TextureLoader().load( texturePath + "snow.jpg" )
     };
   
     for ( let t in textures ) {

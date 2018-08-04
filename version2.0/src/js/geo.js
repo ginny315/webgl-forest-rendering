@@ -1,12 +1,12 @@
 const THREE = require('../lib/three.min');
 import Translate from '../js/translate';
-// import ThreeExtension from '../js/threeExtension';
-// import imgSrc from '../textures/1.png';
 import img1 from '../textures/1.png';
 import img3 from '../textures/3.png';
 
 
 const Geo = {
+    sky: new THREE.PlaneGeometry( 1600, 1600 ),
+    sky2: new THREE.SphereGeometry( 3000, 64, 64 ),
     setPlane: (scene) => {
         let material = new THREE.MeshBasicMaterial({
             color: 0x5B493B // brown

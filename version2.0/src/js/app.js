@@ -6,11 +6,9 @@ import Hepler from './helper';
 import Geo from './geo';
 import Translate from './translate';
 import Common from './common';
+import Material from './material';
 
 const path = require('path');
-// const skeletonData = path.join(__dirname, 'src')+'/json/combineData.json'
-
-// const skeletonData = require(path.join(__dirname, 'src')+'/json/combineData.json');
 const skeletonData = require('../json/combineData.json');
 const scene = new THREE.Scene();
 const matLeave = Geo.loadTexureMat();
@@ -20,6 +18,7 @@ import Terrain from '../js/terrain';
 const camera = Camera(1);
 const renderer = Renderer();
 const noise = Noise();
+const material = Material();
 
 const init = () => {
     let id = null;
@@ -34,11 +33,13 @@ const init = () => {
     id = requestAnimationFrame(draw);
 };
 
-
 const initTerrain = () => {
     let terrain = new Terrain( noise, 1024, 4, 64 );
     scene.add( terrain );
     console.log('initTerrain');
+    let sky2 = new THREE.Mesh( Geo.sky2, material.atmosphere );
+    sky2.position.z = -1000;
+      scene.add( sky2 );
 };
 
 const renderTree = () => {
@@ -87,7 +88,7 @@ const App =  {
         let endTime = + new Date();
         let duration = endTime - beginTime;
         console.log('durationTime=',duration);
-        App.animate();
+        App.animate();       
     },
     animate: function () {
         let app = App;
@@ -98,14 +99,14 @@ const App =  {
         app.smoothMouse.x += smooth * ( app.mouse.x - app.smoothMouse.x );
         app.smoothMouse.y += smooth * ( app.mouse.y - app.smoothMouse.y );
     
-        let time = 0.5 * app.clock.getElapsedTime();
+        // let time = 0.5 * app.clock.getElapsedTime();
         // camera.position.x = 450 * Math.cos( time / 3 ) + app.center.x;
         // camera.position.y = 250 * Math.sin( time / 4 ) + app.center.y + 500;
         // camera.position.z = Math.min( app.smoothMouse.y / 2 + 5, 500 );
         //camera.position.z = 30 + 260 * Math.pow( Math.sin( time ), 4 );
-        camera.position.x = 100 + app.center.x;
-        camera.position.y = 100 + app.center.y;
-        camera.position.z = 10 + app.center.z;
+        camera.position.x = 500 + app.center.x;
+        camera.position.y = 500 + app.center.y;
+        camera.position.z = 500 + app.center.z;
         camera.up = new THREE.Vector3( 0, 0, 1 );
         camera.lookAt( app.center );
     

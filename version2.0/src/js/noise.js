@@ -1,7 +1,6 @@
 const THREE = require('../lib/three.min');
 const ImprovedNoise = require('../lib/ImprovedNoise');
 
-
 const Noise = () => {
   let width = 1024;
   let size = width * width;
