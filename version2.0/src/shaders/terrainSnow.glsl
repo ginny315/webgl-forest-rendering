@@ -43,7 +43,7 @@ float getHeight( vec3 p ) {
   //h += 4.0 * texture2D(uHeightData, 256.0 * st).a;
 
   // Square the height, leads to more rocky looking terrain
-  return h * h / 2000.0;
+  return h * h / 3000.0;
 }
 
 vec3 getNormal() {

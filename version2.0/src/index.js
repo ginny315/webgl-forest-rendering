@@ -3,7 +3,7 @@ import './css/reset.css';
 import './css/style.css';
 
 
-console.log("version="+1.15);
+console.log("version="+1.17);
 App.initApp();
 // App.animate();
 

@@ -1,5 +1,4 @@
 const THREE = require('../lib/three.min');
-const OrbitControls = require('../lib/OrbitControls');
 const SCREEN_WIDTH = window.innerWidth,
       SCREEN_HEIGHT = window.innerHeight;
 const Camera =  (type, threeDControl = true) => {
@@ -22,8 +21,6 @@ const Camera =  (type, threeDControl = true) => {
             1,
             5000);
     }
-    let controls = new THREE.OrbitControls( camera); 
-    controls.enabled = threeDControl; 
     return camera; 
 
     let updateSize = function () {

@@ -4,7 +4,7 @@ $('body').ready(function(){
     var beginTime = + new Date();
     init();   
     $.ajax({
-        url:'json/combineData.json',//id的pos
+        url:'json/combineData2.json',//id的pos
         success: function(data){
             console.log('load combine data-------');
             var posList = data;

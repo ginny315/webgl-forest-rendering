@@ -25,28 +25,33 @@ const ImprovedNoise = {
 		}
 
 		function grad(hash, x, y, z) {
-			let h = hash & 15;
-			let u = h < 8 ? x : y, v = h < 4 ? y : h == 12 || h == 14 ? x : z;
+			let h = hash & 15; // CONVERT LO 4 BITS OF HASH CODE INTO 12 GRADIENT DIRECTIONS.
+			let u = h < 8 ? x : y, 
+				v = h < 4 ? y : h == 12 || h == 14 ? x : z;
 			return ((h&1) == 0 ? u : -u) + ((h&2) == 0 ? v : -v);
 		}
 
 		let floorX = ~~x, floorY = ~~y, floorZ = ~~z;
-		let X = floorX & 255, Y = floorY & 255, Z = floorZ & 255;
-		x -= floorX;
+		let X = floorX & 255, Y = floorY & 255, Z = floorZ & 255; // FIND UNIT CUBE THAT CONTAINS POINT.	
+		x -= floorX; // FIND RELATIVE X,Y,Z OF POINT IN CUBE.
 		y -= floorY;
 		z -= floorZ;
 		let xMinus1 = x -1, yMinus1 = y - 1, zMinus1 = z - 1;
-		let u = fade(x), v = fade(y), w = fade(z);
+		let u = fade(x), v = fade(y), w = fade(z); // COMPUTE FADE CURVES FOR EACH OF X,Y,Z.
 		
+		// HASH COORDINATES OF THE 8 CUBE CORNERS
 		let A = p[X]+Y, AA = p[A]+Z, AB = p[A+1]+Z, B = p[X+1]+Y, BA = p[B]+Z, BB = p[B+1]+Z;
-		return lerp(w, lerp(v, lerp(u, grad(p[AA], x, y, z), 
-						grad(p[BA], xMinus1, y, z)),
-					lerp(u, grad(p[AB], x, yMinus1, z),
-						grad(p[BB], xMinus1, yMinus1, z))),
-				lerp(v, lerp(u, grad(p[AA+1], x, y, zMinus1),
-						grad(p[BA+1], xMinus1, y, z-1)),
-					lerp(u, grad(p[AB+1], x, yMinus1, zMinus1),
-						grad(p[BB+1], xMinus1, yMinus1, zMinus1))));
+		return lerp(w, lerp(v,  lerp(u, grad(p[AA], x, y, z), 
+									    grad(p[BA], xMinus1, y, z)),
+								lerp(u, grad(p[AB], x, yMinus1, z),
+										grad(p[BB], xMinus1, yMinus1, z))
+							),
+						lerp(v, lerp(u, grad(p[AA+1], x, y, zMinus1),
+										grad(p[BA+1], xMinus1, y, z-1)),
+								lerp(u, grad(p[AB+1], x, yMinus1, zMinus1),
+										grad(p[BB+1], xMinus1, yMinus1, zMinus1))
+							)
+					);
 	}
 };
 

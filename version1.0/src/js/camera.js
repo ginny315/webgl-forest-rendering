@@ -10,7 +10,7 @@ const Camera =  (type, threeDControl = true) => {
     };
     let camera;
     if(type == 1){
-        camera = new THREE.PerspectiveCamera(45, 1, 1, 1000);
+        camera = new THREE.PerspectiveCamera(45, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 1000);
         camera.position.set(cameraPos.x, cameraPos.y, cameraPos.z);
         camera.lookAt(new THREE.Vector3(0, 0, 0));
     }else if(type == 2){
