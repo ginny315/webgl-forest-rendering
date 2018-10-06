@@ -2,6 +2,8 @@ const THREE = require('../lib/three.min');
 import Translate from '../js/translate';
 import img1 from '../textures/1.png';
 import img3 from '../textures/3.png';
+const tree1 = '../textures/tree4.png';
+const treeArr = ['../textures/tree4.png','../textures/tree5.png','../textures/tree6.png'];
 
 
 const Geo = {
@@ -67,6 +69,18 @@ const Geo = {
             opacity: 1
         });
         return material;
+    },
+    loadTexureTree: (num) => {
+        // let treeName = 'tree' + num;
+        let texture = new THREE.TextureLoader().load(treeArr[num-1]);
+        let material = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            side: THREE.DoubleSide,
+            // opacity: 0.5,
+            alphaTest: 0.6 
+        });
+        return material; 
     },
     /**
      * two points form a line

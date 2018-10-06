@@ -2,20 +2,16 @@ uniform vec3 uGlobalOffset;
 uniform sampler2D uHeightData;
 uniform vec2 uTileOffset;
 uniform float uScale;
+uniform float uFluctuation;
 
 varying vec3 vNormal;
 varying vec3 vPosition;
 varying float vMorphFactor;
 
-// #define TILE_RESOLUTION 128.0
 const float TILE_RESOLUTION = 64.0;
 
 uniform int uEdgeMorph;
 
-// #define EGDE_MORPH_TOP 1
-// #define EGDE_MORPH_LEFT 2
-// #define EGDE_MORPH_BOTTOM 4
-// #define EGDE_MORPH_RIGHT 8
 const int EGDE_MORPH_TOP = 1;
 const int EGDE_MORPH_LEFT = 2;
 const int EGDE_MORPH_BOTTOM = 4;
@@ -27,7 +23,6 @@ bool edgePresent(int edge) {
   return 2 * ( e / 2 ) != e;
 }
 
-// #define MORPH_REGION 0.3
 const float MORPH_REGION = 0.3;
 
 // At the edges of tiles morph the vertices, if they are joining onto a higher layer
@@ -56,12 +51,13 @@ float calculateMorph(vec3 p) {
 float getHeight(vec3 p) {
   float lod = 0.0;//log2(uScale) - 6.0;
   vec2 st = p.xy / 1024.0;
+  //float fluct = float(uFluctuation)
 
   float h = 1024.0 * texture2DLod(uHeightData, st, lod).a;
   h += 64.0 * texture2DLod(uHeightData, 16.0 * st, lod).a;
   h += 4.0 * texture2DLod(uHeightData, 256.0 * st, lod).a;
 
-  return h * h / 3000.0;
+  return h * h / uFluctuation;
 }
 
 vec3 getNormal() {

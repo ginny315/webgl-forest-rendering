@@ -17,6 +17,7 @@ b=[]
 b=list()
 
 for info in aInfo:
+    print(info)
     a.append(info)
 
 for info in bInfo:

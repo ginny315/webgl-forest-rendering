@@ -10,7 +10,9 @@ var Edge = {
     BOTTOM: 4,
     RIGHT: 8
   };
-var Terrain = function(heightData, worldWidth, levels, resolution){
+
+//noise, 1024, 4, 64, 3000
+var Terrain = function(heightData, worldWidth, levels, resolution, fluctuation){
     THREE.Object3D.call( this );
 
     this.worldWidth = ( worldWidth !== undefined ) ? worldWidth : 1024;
@@ -20,6 +22,7 @@ var Terrain = function(heightData, worldWidth, levels, resolution){
     // Offset is used to re-center the terrain, this way we get the greates detail
     // nearest to the camera. In the future, should calculate required detail level per tile
     this.offset = new THREE.Vector3( 0, 0, 0 );
+    this.fluctuation = fluctuation;
 
     // Which shader should be used for rendering
     // this.fragShaders = [terrainFrag, terrainSnowFrag, terrainToonFrag];
@@ -88,12 +91,13 @@ Terrain.prototype = Object.create( THREE.Object3D.prototype );
                                                       new THREE.Vector2( x, y ),
                                                       scale,
                                                       this.resolution,
-                                                      edgeMorph );
+                                                      edgeMorph,
+                                                    this.fluctuation );
     var plane = new THREE.Mesh( this.tileGeometry, terrainMaterial );
     this.add( plane );
   };
 
-  Terrain.prototype.createTerrainMaterial = function( heightData, globalOffset, offset, scale, resolution, edgeMorph ) {
+  Terrain.prototype.createTerrainMaterial = function( heightData, globalOffset, offset, scale, resolution, edgeMorph,fluctuation ) {
     // Is it bad to change this for every tile?
     // terrainVert.define( "TILE_RESOLUTION", resolution.toFixed(1) );
     return new THREE.ShaderMaterial( {
@@ -105,7 +109,8 @@ Terrain.prototype = Object.create( THREE.Object3D.prototype );
         uRock: { type: "t", value: texture.rock },
         //uSnow: { type: "t", value: texture.snow },
         uTileOffset: { type: "v2", value: offset },
-        uScale: { type: "f", value: scale }
+        uScale: { type: "f", value: scale },
+        uFluctuation: {type:"f", value:this.fluctuation}
       },
       vertexShader: terrainVert,
       fragmentShader: this.fragShader,
