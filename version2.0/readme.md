@@ -20,7 +20,9 @@ index.html css js已经配置完成
         ]
       }
 ```
-
+测试使用样例
+**** 这个没用 renderer.js var renderer = new THREE.WebGLRenderer( { clearColor: 0xffffff } );
+在app.js renderer.js
 
 src/tree-data-prepocess/
 combine.py 
@@ -43,9 +45,14 @@ obj.py
 
 测试cylinder存放于dist/models/obj/cylinder.obj
 
-app.js/camera annotation 2
+app.js/camera 
+annotation 2
 200,200,100是地形画面的静态表示
 缩小可以拉近镜头
+annotation 3
+是地形静态画面，主要是为了展示obj那棵树
+修改镜头需要修改两个地方，注意camera.lookat也要改变
+
 
 
 

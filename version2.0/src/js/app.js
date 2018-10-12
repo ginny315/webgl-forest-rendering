@@ -4,7 +4,7 @@ const dat = require('../lib/dat.gui.min');
 import Camera from './camera';
 import Light from './light';
 import Renderer from './renderer';
-import Hepler from './helper';
+import Helper from './helper';
 import Geo from './geo';
 import Translate from './translate';
 import Common from './common';
@@ -13,30 +13,31 @@ import Noise from '../js/noise';
 import Terrain from '../js/terrain';
 import Treemodel from '../js/treemodel';
 
+// data file resource
 const skeletonData = require('../json/combineData2.json');
-const scene = new THREE.Scene();
+const model1 = 'models/obj/cylinder2.obj';
+const modelLeave1 = 'models/obj/leave.obj';
 const matLeave = Geo.loadTexureMat();
 const matTree1 = Geo.loadTexureTree(1);
 const matTree2 = Geo.loadTexureTree(2);
 const matTree3 = Geo.loadTexureTree(3);
 
-// const tree = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), matTree);
-    
-
+const scene = new THREE.Scene();
+scene.background = new THREE.Color( 0xffffff );
 const camera = Camera(1);
 const renderer = Renderer();
 const noise = Noise();
 const material = Material();
+let container = document.getElementById('container');
 
 var stat = null;
 var gui = null;
-
 var tree11,tree21,tree31;//tree4,tree5,tree6;
 var tree1Arr = [],tree2Arr = [],tree3Arr = [];
 var fluctuation = 3000;
 var fluctuationCurrent = 3000;
 
-const init = () => {
+const init = (app) => {
     initStats();
     fluctuationCurrent = sessionStorage.getItem('flux');
     if(fluctuationCurrent && fluctuationCurrent != '' && fluctuationCurrent != undefined && fluctuationCurrent != null){
@@ -46,13 +47,14 @@ const init = () => {
     }
     // initGui();
     let id = null;
-    Hepler.showGrids(scene); 
-    Hepler.setControl(camera,false); // make no sense to terrain
+    Helper.showGrids(scene); 
+    Helper.setControl(camera,false); // make no sense to terrain
     Light(scene);
-    Treemodel.init(scene);
+    // initTerrain(fluctuationCurrent);
+    // renderTree();
+    renderTreeModel();
     // renderBillboard();
 };
-
 const initStats = () => {
     stat = new Stats(); 
     stat.domElement.style.position = 'absolute'; 
@@ -77,7 +79,6 @@ const setValue = () => {
     sessionStorage.setItem('flux',fluctuationCurrent);
     setTimeout(document.location.reload(true),3000);
 };
-
 const initTerrain = (fluctuation) => {
     let terrain = new Terrain( noise, 1024, 4, 64, fluctuation);
     scene.add( terrain );
@@ -85,6 +86,11 @@ const initTerrain = (fluctuation) => {
     let sky2 = new THREE.Mesh( Geo.sky2, material.atmosphere );
     sky2.position.z = -1000;
     scene.add( sky2 );
+};
+const renderTreeModel = () => {
+    // Treemodel.init(scene,model1, {"1":[0, 0, 0],"2":[0,10,0],"3":[5,5,0]});
+    Treemodel.init(scene,model1, {"1":[0, 0, 0]});
+    Treemodel.initLeave(scene,modelLeave1,{"1":[0,0,0]});
 };
 const renderBillboard = () => {
     renderTreeBillboard1();
@@ -171,7 +177,7 @@ const faceTreeBillboards = () => {
         currentT.position.set(-250+20*i,175+5*i*i,20);
         currentT.quaternion.copy( camera.quaternion);
     }
-}
+};
 
 const renderTree = () => {
     console.log('load combine data-------');
@@ -213,34 +219,54 @@ const App =  {
     smoothMouse: { x: 0, y: 0 },
     center: new THREE.Vector3( 205, 135, 80 ),
     initApp: function(){
+        let app = App;
         let beginTime = + new Date();
         init();
-        // initTerrain(fluctuationCurrent);
-        // renderTree();
         let endTime = + new Date();
         let duration = endTime - beginTime;
         console.log('durationTime=',duration);
-        App.animate();       
+        // container.addEventListener( 'mousemove', function( e ) {
+        //     app.mouse = {
+        //       x: e.clientX - container.offsetWidth / 2,
+        //       // Square to give more sensitivity at bottom of screen
+        //       y: Math.pow( container.offsetHeight - e.clientY, 2 ) / container.offsetHeight
+        //     };
+        // });
+        app.animate();       
     },
     animate: function () {
         stat.begin();
         let app = App;
         window.requestAnimationFrame( app.animate );
 
+        // Smooth mouse position
+        var smooth = 0.02;
+        app.smoothMouse.x += smooth * ( app.mouse.x - app.smoothMouse.x );
+        app.smoothMouse.y += smooth * ( app.mouse.y - app.smoothMouse.y );
+
         // camera annotation 1
         // let time = 0.5 * app.clock.getElapsedTime();
         // camera.position.x = 250 * Math.cos( time / 3 ) + app.center.x;
         // camera.position.y = 250 * Math.sin( time / 4 ) + app.center.y + 500;
-        // camera.position.z = 150 + 60 * Math.pow( Math.sin( time ), 4 );        
+        // camera.position.z = Math.max(150 + 60 * Math.pow( Math.sin( time ), 4 ),app.smoothMouse.y / 2 + 150);
+        // camera.position.z = Math.min( app.smoothMouse.y / 2 + 150, 780 );
+        
         
         // camera annotation 2
-        camera.position.x = 10 + app.center.x-100;
-        camera.position.y = 10 + app.center.y-100;
-        camera.position.z = 10;
+        // camera.position.x = 200 + app.center.x;
+        // camera.position.y = 200 + app.center.y;
+        // camera.position.z = 100 + app.center.z ;
+        
+        // camera annotation 3
+        camera.position.x = 75;
+        camera.position.y = 45;
+        camera.position.z = 40;
 
         camera.up = new THREE.Vector3( 0, 0, 1 );
+        // camera annotation 1&2
         // camera.lookAt( app.center );
-        camera.lookAt(new THREE.Vector3( 105, 35, 10 ))
+        // camera annotation 3
+        camera.lookAt(new THREE.Vector3( 65, 35, 35 ))
 
         // faceTreeBillboards();
 
@@ -251,12 +277,15 @@ const App =  {
         look.multiplyScalar( 50 );
         let across = new THREE.Vector3().crossVectors( look, camera.up );
         across.multiplyScalar( app.smoothMouse.x / 333 );
+
+        // mouse over must keep these code
         // camera.position.add( across );
         // camera.up.add( across.multiplyScalar( -0.005 ) );
         // camera.lookAt( app.center );
     
         // app.terrain.offset.x = camera.position.x;
         // app.terrain.offset.y = camera.position.y;
+        //
         renderer.render( scene, camera );
         stat.end();
     }
