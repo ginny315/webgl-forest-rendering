@@ -1,6 +1,7 @@
 const THREE = require('../lib/three.min');
 const Stats = require('../lib/stats.min');
 const dat = require('../lib/dat.gui.min');
+const OrbitControls = require('../lib/OrbitControls');
 import Camera from './camera';
 import Light from './light';
 import Renderer from './renderer';
@@ -23,12 +24,13 @@ const matTree2 = Geo.loadTexureTree(2);
 const matTree3 = Geo.loadTexureTree(3);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color( 0xffffff );
+// scene.background = new THREE.Color( 0xffffff );
 const camera = Camera(1);
 const renderer = Renderer();
 const noise = Noise();
 const material = Material();
 let container = document.getElementById('container');
+let controls;
 
 var stat = null;
 var gui = null;
@@ -48,7 +50,7 @@ const init = (app) => {
     // initGui();
     let id = null;
     Helper.showGrids(scene); 
-    Helper.setControl(camera,false); // make no sense to terrain
+    // Helper.setControl(camera,true); // make no sense to terrain
     Light(scene);
     // initTerrain(fluctuationCurrent);
     // renderTree();
@@ -88,7 +90,8 @@ const initTerrain = (fluctuation) => {
     scene.add( sky2 );
 };
 const renderTreeModel = () => {
-    // Treemodel.init(scene,model1, {"1":[0, 0, 0],"2":[0,10,0],"3":[5,5,0]});
+    // Treemodel.init(scene,model1, {"1":[0, 0, 0],"2":[0,20,20],"3":[35,5,0],"4":[15,15,0],"5":[5,10,5]});
+    // Treemodel.initLeave(scene,modelLeave1, {"1":[0, 0, 0],"2":[0,20,20],"3":[35,5,0],"4":[15,15,0],"5":[5,10,5]});
     Treemodel.init(scene,model1, {"1":[0, 0, 0]});
     Treemodel.initLeave(scene,modelLeave1,{"1":[0,0,0]});
 };

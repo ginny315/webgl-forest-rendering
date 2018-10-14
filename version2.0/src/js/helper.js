@@ -8,8 +8,11 @@ const Helper = {
         let cameraHelper = new THREE.CameraHelper(camera);
         scene.add(cameraHelper);
     },
-    setControl: (camera, ifControll) => {
-        let controls = new THREE.OrbitControls(camera); 
+    setControl: (camera, ifControll = true) => {
+        console.log(88)
+        console.log(OrbitControls)
+        console.log(OrbitControls.default.init)
+        let controls = new OrbitControls.default.init(camera); 
         controls.enabled = ifControll; 
     }
 };

@@ -53,6 +53,7 @@ annotation 3
 是地形静态画面，主要是为了展示obj那棵树
 修改镜头需要修改两个地方，注意camera.lookat也要改变
 
-
+OrbitControl.js这个库被我改了
+help.js setControl()是调用camera，应该是可以用的。但是这个项目不能用，因为animate里面会随着帧变化变化相机的位置，所以就不能手动设置了。
 
 

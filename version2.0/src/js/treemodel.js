@@ -68,10 +68,12 @@ const Treemodel = { //pos: {"1":[x, y, z],"2":[x,y,z]}
                 console.log(currentPos)
                 if(index==1){
                     object.position.set(currentPos[0],currentPos[1],currentPos[2]);
+                    object.scale.set(1.5, 1.5, 1.5);
                     scene.add( object );
                 }else{
                     var newObj = object.clone();
                     newObj.position.set(currentPos[0],currentPos[1],currentPos[2]);
+                    newObj.scale.set(1.5, 1.5, 1.5);
                     scene.add( newObj );
                 }
                 
