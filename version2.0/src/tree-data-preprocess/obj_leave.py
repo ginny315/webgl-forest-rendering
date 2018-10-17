@@ -26,12 +26,21 @@ with open('leave.txt','w') as wf:
                 z = float(line[2])
                 r = float(line[3])
                 # ran = random.uniform(1.1,5.4)
-                if z > 12 and z < 25 and arr[i] < 5 and arr[i] > 2 and index%2 != 0 and index%3 != 0 and index%5 != 0 and index%17 != 0:
+                if z > 12 and z < 25 and arr[i] < 5 and arr[i] > 2 and index%2 != 0 and index%3 != 0 and index%5 != 0 and index%7 != 0 and index%17 != 0 and index%19 !=0:
+                # if True:   
                     a = a+1
                     wf.write('v'+' '+str(1*r+x)+' '+str(1*r+y)+' '+str(z)+'\n')
                     wf.write('v'+' '+str(1*r+x-2)+' '+str(1*r+y-2)+' '+str(z)+'\n')
                     wf.write('v'+' '+str(1*r+x)+' '+str(1*r+y-2)+' '+str(z)+'\n')
                     wf.write('v'+' '+str(1*r+x+2)+' '+str(1*r+y)+' '+str(z)+'\n')
+                elif z > 12 and z < 25 and arr[i] < 5 and arr[i] > 2 and index%2 != 0 and index%3 != 0 and index%5 == 0 and index%7 == 0 and index%17 == 0 and index%19 ==0:
+                    a = a+1
+                    wf.write('v'+' '+str(1*r+x)+' '+str(y)+' '+str(1*r+z)+'\n')
+                    wf.write('v'+' '+str(1*r+x+2)+' '+str(y)+' '+str(1*r+z-2)+'\n')
+                    wf.write('v'+' '+str(1*r+x)+' '+str(y)+' '+str(1*r+z-2)+'\n')
+                    wf.write('v'+' '+str(1*r+x-2)+' '+str(y)+' '+str(1*r+z)+'\n')
+                else:
+                    pass
         else:
             num = 0
             i = i+1
@@ -47,7 +56,8 @@ with open('leave.txt','w') as wf:
                 y = float(line[1])
                 z = float(line[2])
                 r = float(line[3])
-                if z > 12 and z < 25 and arr[i] < 5 and arr[i] > 2 and index%2 != 0 and index%3 != 0 and index%5 != 0 and index%17 != 0:
+                if z > 12 and z < 25 and arr[i] < 5 and arr[i] > 2 and index%2 != 0 and index%3 != 0:
+                # if True:    
                     wf.write('vt 0.001992 0.001992'+'\n')
                     wf.write('vt 0.001992 0.998008'+'\n')
                     wf.write('vt 0.998008 0.998008'+'\n')

@@ -1,5 +1,7 @@
 const THREE = require('../lib/three.min');
 const OBJLoader = require('../loaders/OBJLoader');
+const DDSLoader = require('../loaders/DDSLoader');
+const MTLLoader = require('../loaders/MTLLoader');
 var object = null;
 
 const Treemodel = { //pos: {"1":[x, y, z],"2":[x,y,z]}
@@ -11,9 +13,7 @@ const Treemodel = { //pos: {"1":[x, y, z],"2":[x,y,z]}
                     child.material.map = texture;
             } );
             Object.keys(pos).forEach((index) => {
-                console.log(index);
                 const currentPos = pos[index];
-                console.log(currentPos)
                 if(index==1){
                     object.position.set(currentPos[0],currentPos[1],currentPos[2]);
                     object.scale.set(1.5, 1.5, 1.5);
@@ -63,9 +63,7 @@ const Treemodel = { //pos: {"1":[x, y, z],"2":[x,y,z]}
                 }         
             } );
             Object.keys(pos).forEach((index) => {
-                console.log(index);
                 const currentPos = pos[index];
-                console.log(currentPos)
                 if(index==1){
                     object.position.set(currentPos[0],currentPos[1],currentPos[2]);
                     object.scale.set(1.5, 1.5, 1.5);
@@ -103,7 +101,49 @@ const Treemodel = { //pos: {"1":[x, y, z],"2":[x,y,z]}
         loader.load( treemodel, function ( obj ) {
             object = obj;
         }, onProgress, onError );
-    }
+    },
+    initFlower: (scene, filepath,mtlname,objname, pos) => {
+        var onProgress = function ( xhr ) {
+            if ( xhr.lengthComputable ) {
+                var percentComplete = xhr.loaded / xhr.total * 100;
+                console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
+            }
+        };
+        var onError = function ( xhr ) { };
+
+        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+
+        new THREE.MTLLoader()
+            .setPath( filepath )
+            .load( mtlname, function ( materials ) {
+                materials.preload();
+                new THREE.OBJLoader()
+                    .setMaterials( materials )
+                    .setPath(filepath )
+                    .load( objname, function ( object ) {
+                        // object.position.set(pos[0],pos[1],pos[2]);
+                        // object.scale.set(1,1,1);
+                        // object.rotateX( Math.PI / 2 );
+                        // scene.add( object );
+                        Object.keys(pos).forEach((index) => {
+                            const currentPos = pos[index];
+                            if(index==1){
+                                object.position.set(currentPos[0],currentPos[1],currentPos[2]);
+                                object.scale.set(1.5, 1.5, 1.5);
+                                object.rotateX( Math.PI / 2 );
+                                scene.add( object );
+                            }else{
+                                var newObj = object.clone();
+                                newObj.position.set(currentPos[0],currentPos[1],currentPos[2]);
+                                newObj.scale.set(1.5, 1.5, 1.5);
+                                // object.rotateX( Math.PI / 2 );
+                                scene.add( newObj );
+                            }
+                            
+                        });
+                    }, onProgress, onError );
+            } );
+    },
 };
 
 export default Treemodel;

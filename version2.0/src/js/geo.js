@@ -2,7 +2,6 @@ const THREE = require('../lib/three.min');
 import Translate from '../js/translate';
 import img1 from '../textures/1.png';
 import img3 from '../textures/3.png';
-const tree1 = '../textures/tree4.png';
 const treeArr = ['../textures/tree4.png','../textures/tree5.png','../textures/tree6.png'];
 
 

@@ -18,19 +18,19 @@ import Treemodel from '../js/treemodel';
 const skeletonData = require('../json/combineData2.json');
 const model1 = 'models/obj/cylinder2.obj';
 const modelLeave1 = 'models/obj/leave.obj';
+const modelPath = 'models/obj/flower/';
 const matLeave = Geo.loadTexureMat();
 const matTree1 = Geo.loadTexureTree(1);
 const matTree2 = Geo.loadTexureTree(2);
 const matTree3 = Geo.loadTexureTree(3);
 
 const scene = new THREE.Scene();
-// scene.background = new THREE.Color( 0xffffff );
+scene.background = new THREE.Color( 0xffffff );
 const camera = Camera(1);
 const renderer = Renderer();
 const noise = Noise();
 const material = Material();
-let container = document.getElementById('container');
-let controls;
+let container = document.getElementById('container'); //mouseover
 
 var stat = null;
 var gui = null;
@@ -39,15 +39,15 @@ var tree1Arr = [],tree2Arr = [],tree3Arr = [];
 var fluctuation = 3000;
 var fluctuationCurrent = 3000;
 
-const init = (app) => {
-    initStats();
+const init = () => {
+    // initStats();
     fluctuationCurrent = sessionStorage.getItem('flux');
     if(fluctuationCurrent && fluctuationCurrent != '' && fluctuationCurrent != undefined && fluctuationCurrent != null){
         fluctuationCurrent = Math.floor(sessionStorage.getItem('flux'));
     }else{
         fluctuationCurrent = 3000;
     }
-    // initGui();
+    initGui();
     let id = null;
     Helper.showGrids(scene); 
     // Helper.setControl(camera,true); // make no sense to terrain
@@ -56,6 +56,40 @@ const init = (app) => {
     // renderTree();
     renderTreeModel();
     // renderBillboard();
+};
+const switchMode = (app) => {
+    let switchMode = document.getElementById('mode-switch');
+    let innerColor = document.getElementById('mode-inner');
+    let clickHandler = (e) => {
+            app.mouse = {
+                x: e.clientX - container.offsetWidth / 2,
+                // Square to give more sensitivity at bottom of screen
+                y: Math.pow( container.offsetHeight - e.clientY, 2 ) / container.offsetHeight
+            };
+    };
+        document.getElementById('mode').addEventListener('click',function(e){
+            e.preventDefault();
+            if(switchMode.getAttribute("data-mode") == 0){ //off -> on
+                switchMode.style.left = '2%';
+                innerColor.style.backgroundColor = '#A0BE44';
+                switchMode.setAttribute("data-mode",1);
+                container.addEventListener( 'mousemove', clickHandler);
+                let look = app.center.clone();
+                look.sub( camera.position );
+                look.normalize();
+                look.multiplyScalar( 50 );
+                let across = new THREE.Vector3().crossVectors( look, camera.up );
+                across.multiplyScalar( app.smoothMouse.x / 333 );
+                camera.position.add( across );
+                camera.up.add( across.multiplyScalar( -0.005 ) );
+                camera.lookAt( app.center );
+            }else{
+                switchMode.style.left = '43%';
+                innerColor.style.backgroundColor = '#9D9D9D';
+                switchMode.setAttribute("data-mode",0);
+                container.removeEventListener( 'mousemove', clickHandler);
+            }
+        });
 };
 const initStats = () => {
     stat = new Stats(); 
@@ -90,53 +124,35 @@ const initTerrain = (fluctuation) => {
     scene.add( sky2 );
 };
 const renderTreeModel = () => {
-    // Treemodel.init(scene,model1, {"1":[0, 0, 0],"2":[0,20,20],"3":[35,5,0],"4":[15,15,0],"5":[5,10,5]});
-    // Treemodel.initLeave(scene,modelLeave1, {"1":[0, 0, 0],"2":[0,20,20],"3":[35,5,0],"4":[15,15,0],"5":[5,10,5]});
-    Treemodel.init(scene,model1, {"1":[0, 0, 0]});
-    Treemodel.initLeave(scene,modelLeave1,{"1":[0,0,0]});
+    Treemodel.init(scene,model1, {"1":[0, 0, 0],"2":[0,20,0],"3":[35,5,0],"4":[15,15,0],"5":[5,10,2]});
+    Treemodel.initLeave(scene,modelLeave1, {"1":[0, 0, 0],"2":[0,20,0],"3":[35,5,0],"4":[15,15,0],"5":[5,10,2]});
+    // Treemodel.init(scene,model1, {"1":[0, 0, 0]});
+    // Treemodel.initLeave(scene,modelLeave1,{"1":[0,0,0]})
+    Treemodel.initFlower(scene,modelPath,'flower1.mtl','flower1.obj',{"1":[50, 50, 0],"2":[60,50,0],"3":[70,45,0]});//'flower1.mtl','flower1.obj'
 };
-const renderBillboard = () => {
-    renderTreeBillboard1();
-    renderTreeBillboard2();
-    renderTreeBillboard3();
+const renderBillboard = () => { //index,size,mat,model,length,treeArr
+    renderTreeBillboard(1,35,matTree1,tree11,11,tree1Arr);
+    renderTreeBillboard(2,25,matTree2,tree21,5,tree2Arr);
+    renderTreeBillboard(3,40,matTree3,tree31,15,tree3Arr);
 };
-const renderTreeBillboard1 = () => {
-    tree11 = new THREE.Mesh(new THREE.PlaneGeometry(35, 35), matTree1);
-    tree11.rotateX( Math.PI / 2 );
-    tree1Arr["tree11"] = tree11;
-    scene.add(tree11);
-    for(let i=2,len=11 ; i<len ; i++){
-        let currentTN = 'tree1'+i;
-        tree1Arr[currentTN] = tree11.clone();
-        scene.add(tree1Arr[currentTN]);
-    }
-};
-const renderTreeBillboard2 = () => {
-    tree21 = new THREE.Mesh(new THREE.PlaneGeometry(25, 25), matTree2);
-    tree21.rotateX( Math.PI / 2 );
-    tree2Arr["tree21"] = tree21;
-    scene.add(tree21);
-    for(let i=2,len=5 ; i<len ; i++){
-        let currentTN = 'tree2'+i;
-        tree2Arr[currentTN] = tree21.clone();
-        scene.add(tree2Arr[currentTN]);
-    }
-};
-const renderTreeBillboard3 = () => {
-    tree31 = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), matTree3);
-    tree31.rotateX( Math.PI / 2 );
-    tree3Arr["tree31"] = tree31;
-    scene.add(tree31);
-    for(let i=2,len=15 ; i<len ; i++){
-        let currentTN = 'tree3'+i;
-        tree3Arr[currentTN] = tree31.clone();
-        scene.add(tree3Arr[currentTN]);
+const renderTreeBillboard = (index,size,mat,model,length,treeArr) => {
+    let tree = 'tree'+index;
+    let currentTN = tree+'1';
+    model = new THREE.Mesh(new THREE.PlaneGeometry(size, size), mat);
+    model.rotateX( Math.PI / 2 );
+    treeArr[currentTN] = model;
+    scene.add(model);
+    for(let i=2,len=length ; i<len ; i++){
+        currentTN = tree+i;
+        treeArr[currentTN] = model.clone();
+        scene.add(treeArr[currentTN]);
     }
 };
 /*
 * tree face to camera 
 */
 const faceTreeBillboards = () => {
+    // distribution of tree1 
     for(let i=1,len=5 ; i<len ; i++){
         let currentTN = 'tree1'+i;
         let currentT = tree1Arr[currentTN];
@@ -155,13 +171,14 @@ const faceTreeBillboards = () => {
         currentT.position.set(23*(i-7)+22*(i-7),49+5*(i-7)*(i-7),20);
         currentT.quaternion.copy( camera.quaternion);
     }
-    
+    // distribution of tree2 
     for(let i=1,len=5 ; i<len ; i++){
         let currentTN = 'tree2'+i;
         let currentT = tree2Arr[currentTN];
-        currentT.position.set(52*i+20*i*i,30+4*i,20);
+        currentT.position.set(52*i+2*i*i,30+4*i,20);
         currentT.quaternion.copy( camera.quaternion);
     }
+    // // distribution of tree3
     for(let i=1,len=7 ; i<len ; i++){
         let currentTN = 'tree3'+i;
         let currentT = tree3Arr[currentTN];
@@ -228,17 +245,11 @@ const App =  {
         let endTime = + new Date();
         let duration = endTime - beginTime;
         console.log('durationTime=',duration);
-        // container.addEventListener( 'mousemove', function( e ) {
-        //     app.mouse = {
-        //       x: e.clientX - container.offsetWidth / 2,
-        //       // Square to give more sensitivity at bottom of screen
-        //       y: Math.pow( container.offsetHeight - e.clientY, 2 ) / container.offsetHeight
-        //     };
-        // });
+        switchMode(app);
         app.animate();       
     },
     animate: function () {
-        stat.begin();
+        // stat.begin();
         let app = App;
         window.requestAnimationFrame( app.animate );
 
@@ -256,20 +267,20 @@ const App =  {
         
         
         // camera annotation 2
-        // camera.position.x = 200 + app.center.x;
-        // camera.position.y = 200 + app.center.y;
-        // camera.position.z = 100 + app.center.z ;
+        camera.position.x = 200 + app.center.x;
+        camera.position.y = 200 + app.center.y;
+        camera.position.z = 100 + app.center.z;
         
         // camera annotation 3
-        camera.position.x = 75;
-        camera.position.y = 45;
-        camera.position.z = 40;
+        // camera.position.x = 75+20;
+        // camera.position.y = 45+20;
+        // camera.position.z = 40+20;
 
         camera.up = new THREE.Vector3( 0, 0, 1 );
         // camera annotation 1&2
-        // camera.lookAt( app.center );
+        camera.lookAt( app.center );
         // camera annotation 3
-        camera.lookAt(new THREE.Vector3( 65, 35, 35 ))
+        // camera.lookAt(new THREE.Vector3(65,35,35))
 
         // faceTreeBillboards();
 
@@ -290,7 +301,7 @@ const App =  {
         // app.terrain.offset.y = camera.position.y;
         //
         renderer.render( scene, camera );
-        stat.end();
+        // stat.end();
     }
 };
 

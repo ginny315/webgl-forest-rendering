@@ -56,4 +56,18 @@ annotation 3
 OrbitControl.js这个库被我改了
 help.js setControl()是调用camera，应该是可以用的。但是这个项目不能用，因为animate里面会随着帧变化变化相机的位置，所以就不能手动设置了。
 
+billboard设置
+geo.js 
+treeArr中添加图片
+app.js中
+const matTree3 = Geo.loadTexureTree(3);开头添加全局参数
+var tree11,tree21,tree31;//tree4,tree5,tree6;
+var tree1Arr = [],tree2Arr = [],tree3Arr = [];
+/*
+ * index,size,mat,model,length,treeArr
+ */
+renderTreeBillboard(3,40,matTree3,tree31,15,tree3Arr);
+
+
+
 
