@@ -2,7 +2,8 @@ const THREE = require('../lib/three.min');
 import Translate from '../js/translate';
 import img1 from '../textures/1.png';
 import img3 from '../textures/3.png';
-const treeArr = ['../textures/tree4.png','../textures/tree5.png','../textures/tree6.png'];
+// const treeArr = ['../textures/tree4.png','../textures/tree5.png','../textures/tree6.png',
+// '../textures/tree_pink.png','../textures/tree_pink2.png'];
 
 
 const Geo = {
@@ -69,9 +70,9 @@ const Geo = {
         });
         return material;
     },
-    loadTexureTree: (num) => {
+    loadTexureTree: (treeBD) => {
         // let treeName = 'tree' + num;
-        let texture = new THREE.TextureLoader().load(treeArr[num-1]);
+        let texture = new THREE.TextureLoader().load(treeBD);
         let material = new THREE.MeshBasicMaterial({
             map: texture,
             transparent: true,

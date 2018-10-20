@@ -16,12 +16,13 @@ const Treemodel = { //pos: {"1":[x, y, z],"2":[x,y,z]}
                 const currentPos = pos[index];
                 if(index==1){
                     object.position.set(currentPos[0],currentPos[1],currentPos[2]);
-                    object.scale.set(1.5, 1.5, 1.5);
+                    object.scale.set(1.2, 1.2, 1.2);
                     scene.add( object );
                 }else{
                     var newObj = object.clone();
                     newObj.position.set(currentPos[0],currentPos[1],currentPos[2]);
-                    newObj.scale.set(1.5, 1.5, 1.5);
+                    newObj.scale.set(1.2, 1.2, 1.2);
+                    newObj.rotation.set( 0,0,Math.PI / 2 * currentPos[3]);
                     scene.add( newObj );
                 }
                 
@@ -66,12 +67,14 @@ const Treemodel = { //pos: {"1":[x, y, z],"2":[x,y,z]}
                 const currentPos = pos[index];
                 if(index==1){
                     object.position.set(currentPos[0],currentPos[1],currentPos[2]);
-                    object.scale.set(1.5, 1.5, 1.5);
+                    object.scale.set(1.2, 1.2, 1.2);
+
                     scene.add( object );
                 }else{
                     var newObj = object.clone();
                     newObj.position.set(currentPos[0],currentPos[1],currentPos[2]);
-                    newObj.scale.set(1.5, 1.5, 1.5);
+                    newObj.scale.set(1.2, 1.2, 1.2);
+                    newObj.rotation.set( 0,0,Math.PI / 2 * currentPos[3]);
                     scene.add( newObj );
                 }
                 
@@ -102,7 +105,7 @@ const Treemodel = { //pos: {"1":[x, y, z],"2":[x,y,z]}
             object = obj;
         }, onProgress, onError );
     },
-    initFlower: (scene, filepath,mtlname,objname, pos) => {
+    initFlower: (scene, filepath,mtlname,objname, scale,pos) => {
         var onProgress = function ( xhr ) {
             if ( xhr.lengthComputable ) {
                 var percentComplete = xhr.loaded / xhr.total * 100;
@@ -129,17 +132,15 @@ const Treemodel = { //pos: {"1":[x, y, z],"2":[x,y,z]}
                             const currentPos = pos[index];
                             if(index==1){
                                 object.position.set(currentPos[0],currentPos[1],currentPos[2]);
-                                object.scale.set(1.5, 1.5, 1.5);
+                                object.scale.set(scale, scale, scale);
                                 object.rotateX( Math.PI / 2 );
                                 scene.add( object );
                             }else{
                                 var newObj = object.clone();
                                 newObj.position.set(currentPos[0],currentPos[1],currentPos[2]);
-                                newObj.scale.set(1.5, 1.5, 1.5);
-                                // object.rotateX( Math.PI / 2 );
+                                newObj.scale.set(scale, scale, scale);
                                 scene.add( newObj );
-                            }
-                            
+                            }                           
                         });
                     }, onProgress, onError );
             } );

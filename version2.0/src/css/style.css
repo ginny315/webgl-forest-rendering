@@ -10,6 +10,7 @@ body {
     overflow: hidden;
     margin: 0;
     padding: 0;
+    /* color:#87CEEB; */
 }
 /* p{
     width: 300px;
@@ -29,6 +30,7 @@ body {
   }
 .controllMode{
 position: fixed;
+z-index: 100;
 left: 50%;
 top: 0;
 width: 200px;

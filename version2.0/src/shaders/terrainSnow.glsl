@@ -91,7 +91,8 @@ void main() {
   float shadowFactor = pow(incidence, 0.72);
   shadowFactor = 0.03 + 0.97 * shadowFactor;
   color = mix( vec3( 0, 0, 0 ), color, shadowFactor );
-  color = mix( color, vec3( 0.81, 0.9, 1.0 ), 0.2 * shadowFactor );
+  color = mix( color, vec3( 0.81, 0.9, 1.0 ), 0.1 * shadowFactor );
+  color = mix( color, vec3( 0.81, 0.9, 1.0 ), 0.1 * shadowFactor );
 
   // Fade out based on distance
   //color = mix( color, vec3( 0, 0, 0 ), smoothstep( 350.0, 500.0, distance( light, vPosition ) ) );
@@ -110,14 +111,14 @@ void main() {
   fogAngle = smoothstep( 0.0, 1.0, fogAngle );
   //vec3 fogColor = mix( vec3( 0.86, 0.95, 1.0 ), vec3( 0.98, 0.77, 0.33), fogAngle );
   vec3 fogColor = vec3( 0.86, 0.95, 1.0 );
-  color = mix( color, fogColor, fogFactor );
+  //color = mix( color, fogColor, fogFactor );
 
   // Add distance fog
   float depth = gl_FragCoord.z / gl_FragCoord.w;
   fogFactor = smoothstep( 300.0, 1000.0, depth );
   //fogFactor = fogFactor * ( 1.0 - clamp( ( camH - 5.0 ) / 8.0, 0.0, 1.0 ) );
   fogColor = mix( vec3( 1.0, 0.945, 0.847 ), vec3( 0.98, 0.77, 0.33), fogAngle );
-  color = mix( color, fogColor, fogFactor );
+  //color = mix( color, fogColor, fogFactor );
 
   gl_FragColor = vec4(color, 1.0 - fogFactor);
 }
