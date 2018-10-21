@@ -73,6 +73,12 @@ const init = () => {
 const switchMode = (app) => {
     let switchMode = document.getElementById('mode-switch');
     let innerColor = document.getElementById('mode-inner');
+    let snow = document.getElementById('snow');
+    let themeT1 = document.getElementById('themeText1');
+    let themeT2 = document.getElementById('themeText2');
+    let themeL1 = document.getElementById('themeLogo1');
+    let themeL2 = document.getElementById('themeLogo2');
+
     let clickHandler = (e) => {
             app.mouse = {
                 x: e.clientX - container.offsetWidth / 2,
@@ -103,6 +109,38 @@ const switchMode = (app) => {
                 container.removeEventListener( 'mousemove', clickHandler);
             }
         });
+        snow.addEventListener('click',function(){
+            if(snow.getAttribute("data-theme") == 0){
+                console.log('start winter');
+                snow.setAttribute("data-theme",1);
+                themeT1.style.display = 'block';
+                themeL1.style.display = 'block';
+                themeT2.style.display = 'none';
+                themeL2.style.display = 'none';
+                material.atmosphere.uniforms.uHorizonColor.value = new THREE.Color( 0x000000 );
+                material.atmosphere.uniforms.uSkyColor.value = new THREE.Color( 0xf9f9ff );
+                // let children = scene.children;
+                // console.log(children);
+                // children.forEach(function(item){
+                //     if((item.type == 'Mesh' && (item.name != 'terrain' || item.name != 'sky') )
+                //      || item.type == 'Group'){
+                //         console.log('remove')
+                //         scene.remove(item);
+                //     }
+                // });
+                terrain.cycleShader(1);
+            }else{
+                console.log('start summer');
+                snow.setAttribute("data-theme",0);
+                themeT1.style.display = 'none';
+                themeL1.style.display = 'none';
+                themeT2.style.display = 'block';
+                themeL2.style.display = 'block';
+                material.atmosphere.uniforms.uHorizonColor.value = new THREE.Color( 0xfff1d8 );
+                material.atmosphere.uniforms.uSkyColor.value = new THREE.Color( 0x87CEEB );
+                terrain.cycleShader(0);
+            }
+        });
 };
 const initStats = () => {
     stat = new Stats(); 
@@ -129,10 +167,12 @@ const setValue = () => {
 };
 const initTerrain = (fluctuation) => {
     terrain = new Terrain( noise, 1024, 4, 64, fluctuation);
+    terrain.name = 'terrain';
     scene.add( terrain );
     console.log('initTerrain');
     ///Add sky
     let sky = new THREE.Mesh( Geo.sky2, material.atmosphere );
+    sky.name = 'sky';
     // sky.position.z = -1000;
     scene.add( sky );
     console.log('initSky');
@@ -169,10 +209,12 @@ const renderTreeBillboard = (index,size,mat,model,length,treeArr) => {
     model = new THREE.Mesh(new THREE.PlaneGeometry(size, size), mat);
     model.rotateX( Math.PI / 2 );
     treeArr[currentTN] = model;
+    model.name = "billboard";
     scene.add(model);
     for(let i=2,len=length ; i<len ; i++){
         currentTN = tree+i;
         treeArr[currentTN] = model.clone();
+        model.name = "billboard";
         scene.add(treeArr[currentTN]);
     }
 };
@@ -220,7 +262,6 @@ const faceTreeBillboards = () => {
         let currentT = tree4Arr[currentTN];
         currentT.position.set(-20*i,150+2*i*i,20);
         currentT.quaternion.copy( camera.quaternion);
-        console.log('pink')
     }
     // distribution of pink tree 2
     for(let i=1,len=5 ; i<len ; i++){

@@ -1,5 +1,6 @@
 const THREE = require('../lib/three.min');
 const terrainVert = require('../shaders/terrain.glsl');
+const terrainSummerFrag = require('../shaders/terrainSummer.glsl');
 const terrainSnowFrag = require('../shaders/terrainSnow.glsl');
 const texture = require('../js/texture');
 
@@ -26,7 +27,7 @@ var Terrain = function(heightData, worldWidth, levels, resolution, fluctuation){
 
     // Which shader should be used for rendering
     // this.fragShaders = [terrainFrag, terrainSnowFrag, terrainToonFrag];
-    this.fragShader = terrainSnowFrag;
+    this.fragShader = terrainSummerFrag;
 
     // Create geometry that we'll use for each tile, just a standard plane
     this.tileGeometry = new THREE.PlaneGeometry( 1, 1, this.resolution, this.resolution );
@@ -116,6 +117,24 @@ Terrain.prototype = Object.create( THREE.Object3D.prototype );
       fragmentShader: this.fragShader,
       transparent: true
     } );
+  };
+
+  Terrain.prototype.cycleShader = function(type) {
+    // Swap between different terrains
+    // var f = this.fragShaders.indexOf( this.fragShader );
+    // f = ( f + 1 ) % this.fragShaders.length;
+    if(type == 0){
+      this.fragShader = terrainSummerFrag;
+    }else{
+      this.fragShader = terrainSnowFrag;
+    }
+
+    // Update all tiles
+    for ( var c in this.children ) {
+      var tile = this.children[c];
+      tile.material.fragmentShader = this.fragShader;
+      tile.material.needsUpdate = true;
+    }
   };
 
   export default Terrain;

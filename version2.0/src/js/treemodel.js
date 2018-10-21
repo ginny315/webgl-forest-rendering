@@ -17,12 +17,14 @@ const Treemodel = { //pos: {"1":[x, y, z],"2":[x,y,z]}
                 if(index==1){
                     object.position.set(currentPos[0],currentPos[1],currentPos[2]);
                     object.scale.set(1.2, 1.2, 1.2);
+                    object.name = 'trunk';
                     scene.add( object );
                 }else{
                     var newObj = object.clone();
                     newObj.position.set(currentPos[0],currentPos[1],currentPos[2]);
                     newObj.scale.set(1.2, 1.2, 1.2);
                     newObj.rotation.set( 0,0,Math.PI / 2 * currentPos[3]);
+                    newObj.name = 'trunk';
                     scene.add( newObj );
                 }
                 
@@ -68,13 +70,14 @@ const Treemodel = { //pos: {"1":[x, y, z],"2":[x,y,z]}
                 if(index==1){
                     object.position.set(currentPos[0],currentPos[1],currentPos[2]);
                     object.scale.set(1.2, 1.2, 1.2);
-
+                    object.name = 'leave';
                     scene.add( object );
                 }else{
                     var newObj = object.clone();
                     newObj.position.set(currentPos[0],currentPos[1],currentPos[2]);
                     newObj.scale.set(1.2, 1.2, 1.2);
                     newObj.rotation.set( 0,0,Math.PI / 2 * currentPos[3]);
+                    newObj.name = 'leave';
                     scene.add( newObj );
                 }
                 
@@ -134,11 +137,13 @@ const Treemodel = { //pos: {"1":[x, y, z],"2":[x,y,z]}
                                 object.position.set(currentPos[0],currentPos[1],currentPos[2]);
                                 object.scale.set(scale, scale, scale);
                                 object.rotateX( Math.PI / 2 );
+                                object.name = 'flower';
                                 scene.add( object );
                             }else{
                                 var newObj = object.clone();
                                 newObj.position.set(currentPos[0],currentPos[1],currentPos[2]);
                                 newObj.scale.set(scale, scale, scale);
+                                newObj.name = 'flower';
                                 scene.add( newObj );
                             }                           
                         });
