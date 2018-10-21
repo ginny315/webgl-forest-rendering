@@ -77,5 +77,5 @@ node_modules
 npm-debug.log
 
 dist
-src/models
-src/textures
+models
+textures
